@@ -1,0 +1,49 @@
+# How to write patterns:
+# Commonly, the patterns are regex.
+# Provided some source directory like this:
+# <top_dir>/
+#         .svn/
+#          app/
+#              .svn/
+#              script.py
+#              script.pyc
+#          test/
+#              .svn/
+#              a.py
+#              b.py
+#              b.py
+#          todo.txt
+#
+# 1. Exclude a certain directory, including the files in its.
+#   Use the directory name as pattern
+#   eg: exclude directory `test', the pattern is "test"
+# 2. Exclude all file with specified suffix
+#   Use the suffix as pattern
+#   eg: exclude file with suffix .pyc, the pattern is "*.pyc"
+# 3. Exclude a certain file
+#   Use the file name as pattern
+#   eg: exclude file `todo.txt', the pattern is "todo.txt"
+
+
+# Exclude pattern list, one pattern per line
+# Lines with leading sharp are comments, will be ignored.
+
+.svn
+.cvs
+.git
+.gitignore
+*.pyc
+*.pyo
+*.swp*
+*.merge
+#*#
+
+exclude.txt
+README.md
+deleteme
+
+install.sh
+.install*
+
+my_*
+doc

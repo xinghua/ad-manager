@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block external_head %}
+<title>游戏管理</title>
+<script src="/res/js/common/common.js"></script>
+{% endblock %}
+
+{% block content %}
+<input type="hidden"  id="operateType" name="operateType" value=""/>
+    <div class="panel panel-primary">
+         <div class="panel-body">
+            <div class="row">                       
+                <div class="col-md-12">
+                    <a class="btn btn-primary" data-toggle="modal" href="#popup" onclick="save(this,1);">添加</a>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+    <div class="row">               
+        <div class="col-md-12">
+            <table class="table table-striped table-hover table-condensed table-bordered" id="mainTable">
+                 <thead>
+                   <tr class="ui-bar-c">
+                     <th>游戏ID</th>
+                     <th>游戏名称</th>
+                     <th>创建时间</th>
+                     <th>操作</th>                      
+                   </tr>
+                 </thead>
+
+                 <tbody>
+                       <tr id="sort_game_id" value = "152">
+                            <td>152</td>
+                            <td>蜀山</td>
+                            <td>2015-12-07 13:49:06</td>
+                            <td>
+                                <input type="hidden"  name="gameId" value="153"> 
+                                <input type="hidden"  name="gameName" value="蜀山">
+                                <input type="hidden" name="typeId" value="1">
+                                <a class="btn btn-default btn-xs" data-toggle="modal" href="#popup" onclick="save(this,2);">修改</a>
+                                &nbsp;&nbsp;&nbsp;
+                            <!--        <button type="button"  class="btn btn-default btn-xs" onclick="deleteRow(this,0);">删除</button> -->
+                                
+                            </td>
+                        </tr>
+                       <tr id="sort_game_id" value = "153">
+                            <td>153</td>
+                            <td>蜀山战纪</td>
+                            <td>2015-12-07 13:49:06</td>
+                            <td>
+                                <input type="hidden"  name="gameId" value="153"> 
+                                <input type="hidden"  name="gameName" value="蜀山战纪">
+                                <input type="hidden" name="typeId" value="1">
+                                <a class="btn btn-default btn-xs" data-toggle="modal" href="#popup" onclick="save(this,2);">修改</a>
+                                &nbsp;&nbsp;&nbsp;
+                            <!--        <button type="button"  class="btn btn-default btn-xs" onclick="deleteRow(this,0);">删除</button> -->
+                                
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+        <div class="modal" id="popup">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="titl"></h4>
+                </div>
+                 <form id="mainForm" role="form" class="form-horizontal" action="/games" method="post">
+                        <input id="gameId" name="gameId" class="form-control" type="text" value="" style="display:none"/>
+                        <div class="modal-body">
+                         
+                                <div class="form-group">                            
+                                    <label class="col-md-2 control-label" for="gameName">
+                                        游戏名称
+                                    </label>
+                                    <div class="col-md-10">                             
+                                        <input id="gameName" name="gameName" class="form-control" type="text" value=""/>
+                                        <p class="text-danger"></p>
+                                    </div>                  
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                        <center>                          
+                          <button type="submit" id="btn" class="btn btn-primary">保存</button>
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">返回</button>
+                        </center>                 
+                        </div>
+                </form>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+        <script type="text/javascript">
+        
+        var fixHelperModified = function(e, tr) {
+                var $originals = tr.children();
+                var $helper = tr.clone();
+                $helper.children().each(function(index) {
+                    $(this).width($originals.eq(index).width())
+                });
+                return $helper;
+            };
+            $("#mainTable tbody").sortable({
+                  helper: fixHelperModified,
+                  containment: 'parent',
+                  placeholder: 'ui-state-highlight'
+            }).disableSelection(); 
+            
+        </script>
+<script src="/res/js/system/games.js"></script>
+{% endblock %}

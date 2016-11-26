@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block external_head %}
+<title>媒体类型管理</title>
+<script src="/res/js/common/common.js"></script>
+{% endblock %}
+
+{% block content %}
+        <div class="panel panel-primary">
+                 <div class="panel-body">
+                    <div class="row">                       
+                        <div class="col-md-12">
+                            <a class="btn btn-primary" data-toggle="modal" href="#popup">添加</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        <div class="row">               
+                <div class="col-md-12">
+                    <table class="table table-striped table-hover table-condensed table-bordered" id="mainTable">       
+                   
+                         <thead>
+                           <tr>
+                             <th>类型ID</th>
+                             <th>类型名称</th>
+                             <th>创建时间</th>                      
+                           </tr>
+                         </thead>
+                         <tbody>
+                            
+                                <tr>
+                                    <td>1</td>
+                                    <td>效果广告</td>
+                                    <td>2016-04-15 09:52:24</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td>2</td>
+                                    <td>免费合作</td>
+                                    <td>2016-04-15 09:52:45</td>
+                                </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+        
+        
+        
+        <div class="modal" id="popup">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">添加类型</h4>
+                </div>
+                 <form id="mainForm" role="form" class="form-horizontal" action="/types" method="post">
+                        <div class="modal-body">
+                                <div class="form-group">                            
+                                    <label class="col-md-2 control-label" for="typeName">
+                                        类型名称
+                                    </label>
+                                    <div class="col-md-10">                             
+                                        <input id="typeName" name="typeName" class="form-control" type="text" value=""/>
+                                        <p class="text-danger"></p>
+                                    </div>                  
+                                </div>                      
+                            
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">保存</button>                 
+                        </div>
+                </form>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+<script src="/res/js/system/types.js"></script>       
+{% endblock %}
+

@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>      
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>广告系统</title>     
+
+<script type="text/javascript">
+  var contextRootPath = "";
+</script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="/res/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/res/bootstrap/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/res/font-awesome/css/font-awesome.css">
+<link rel="stylesheet" href="/res/bootstrap/plugin/datetimepicker/css/bootstrap-datetimepicker.css">
+<link rel="stylesheet" href="/res/bootstrap/plugin/select/css/bootstrap-select.css">
+<link rel="stylesheet" href="/res/css/font-awesome_fix_width.css">
+<link rel="stylesheet" type="text/css" href="/res/ligerUI/skins/Aqua/css/ligerui-all.css"/>
+<link rel="stylesheet" type="text/css" href="/res/ligerUI/skins/Aqua/css/ligerui-tree.css"> 
+<link rel="stylesheet" href="/res/css/eadmaster.css">
+
+<script src="/res/js/jquery.js"></script>
+<script src="/res/js/jquery-ui.js"></script>
+<script src="/res/bootstrap/js/bootstrap.min.js"></script>
+<!--[if lt IE 9]>
+<script src="/res/bootstrap/js/html5shiv.js"></script>
+<script src="/res/bootstrap/js/respond.min.js"></script>
+<![endif]-->
+<script src="/res/jquery-validate/jquery.validate.js"></script>
+<script src="/res/jquery-validate/messages_zh.js"></script>
+<script src="/res/dataTables/js/jquery.dataTables.js"></script>
+<script src="/res/bootstrap/plugin/datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="/res/bootstrap/plugin/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/res/bootstrap/plugin/select/js/bootstrap-select.js"></script>
+<script type="text/javascript" src="/res/ligerUI/js/core/base.js"></script>
+<script type="text/javascript" src="/res/ligerUI/js/plugins/ligerTree.js"></script>
+<script src="/res/highcharts/highcharts.js"></script>
+</head>
+
+    <body id="mainBody">
+        
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom:0px">           
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                            <span class="sr-only">Toggle navigation</p>
+                            <span class="icon-bar"></p>
+                            <span class="icon-bar"></p>
+                            <span class="icon-bar"></p>
+                        </button>                       
+                        <a class="navbar-brand" href="#" style="color: white;"><i class="fa fa-home"></i>&nbsp;&nbsp;ADs Platform</a>
+                    </div>
+                    
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right" >
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: white;">test<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                     
+                                    <li><a href="/home/account" target="mainFrame" id="account"><i class="fa fa-user"></i>&nbsp;&nbsp;账号管理</a></li>
+                                    <li class="divider"></li>
+                                    
+                                    <li><a href="/home/exit"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;退出</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    
+        <p/>
+        <div class="row">
+            <div class="col-md-2 well" id="menu">               
+                <div class="panel-group">
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <i class="fa fa-list-alt icon-fixed-width">
+                                </i>&nbsp;&nbsp;
+                                <a class="accordion-toggle" data-toggle="collapse" href="#menuMain1" style="text-decoration:none">概览</a>
+                            </h4>
+                        </div>
+                        <div id="menuMain1" class="panel-collapse collapse">
+                            <div class="panel-body" style="padding:0">
+                                <ul class="list-group" style="margin:0">
+                                    <a href="/app/home/welcome" target="mainFrame" class="list-group-item" id="menuSub18">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i>&nbsp;&nbsp;游戏概况</a>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <i class="fa fa-list-alt icon-fixed-width">
+                                </i>&nbsp;&nbsp;
+                                <a class="accordion-toggle" data-toggle="collapse" href="#menuMain2" style="text-decoration:none">系统配置</a>
+                            </h4>
+                        </div>
+                        <div id="menuMain2" class="panel-collapse collapse">
+                            <div class="panel-body" style="padding:0">
+                                <ul class="list-group" style="margin:0">
+                                    <a href="/app/system/game/list" target="mainFrame" class="list-group-item" id="menuSub18">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i>&nbsp;&nbsp;游戏管理</a>
+                                    <a href="/app/system/media/list" target="mainFrame" class="list-group-item" id="menuSub19">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i>&nbsp;&nbsp;媒体类型管理</a>
+                                    <a href="/app/system/pay/list" target="mainFrame" class="list-group-item" id="menuSub19">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i>&nbsp;&nbsp;付费类型管理</a>
+                                    <a href="/app/system/channel/list" target="mainFrame" class="list-group-item" id="menuSub19">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i>&nbsp;&nbsp;渠道管理</a>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <i class="fa fa-list-alt icon-fixed-width">
+                                </i>&nbsp;&nbsp;
+                                <a class="accordion-toggle" data-toggle="collapse" href="#menuMain3" style="text-decoration:none">广告配置</a>
+                            </h4>
+                        </div>
+                        <div id="menuMain3" class="panel-collapse collapse">
+                            <div class="panel-body" style="padding:0">
+                                <ul class="list-group" style="margin:0">
+                                    <a href="/app/project/list" target="mainFrame" class="list-group-item" id="menuSub18">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i>&nbsp;&nbsp;广告管理</a>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> 
+
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row" id="breadcrumb">
+                    <div class="col-md-12">
+                        <ol class="breadcrumb">
+                            <li id="breadcrumbMain">                                
+                            </li>
+                            <li id="breadcrumbSub">                             
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <iframe id="mainFrame" name="mainFrame" scrolling="no" 
+                    style="width: 100%;border: 0;overflow:hidden;" src="/app/home/welcome"></iframe>
+            </div>
+        </div>   
+    <script src="/res/js/home/home.js"></script>
+    </body>
+</html>

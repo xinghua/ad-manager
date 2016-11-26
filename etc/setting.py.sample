@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+    configure variables affected by environment.
+"""
+
+import os
+from etc import config
+
+
+class PAGE_LIMIT(object):
+    NORMAL = 20
+
+class DAILY_LOG(object):
+    CLICK_LOG_PATH =  os.path.join(config.project_home, "data/click")
+    POINT_LOG_PATH = ""
+
+class FILE_LOCK(object):
+    DEFAULT_PATH = os.path.join(config.project_home, "locks")
+
+class SIGN(object):
+    KEY = "xxx"
+    DATA_RID = "xxx"
