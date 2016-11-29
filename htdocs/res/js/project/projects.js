@@ -55,8 +55,9 @@ function save(obj,index){
 	
 	if(index==1){
 		$("#project_name").val("");
+		$("#url").val("");
 		$("#titl").text("添加广告");
-		$("#mainForm").attr("action","/games/addGames")
+		$("#mainForm").attr("action","/app/project/add")
 		
 	}else if(index==2){
 		var project_id=$(obj).parent("td").parent("tr").find("input[name=project_id]").val();
@@ -75,6 +76,6 @@ function save(obj,index){
 		$('#channel_id').selectpicker('val', channel_id);
 		$('#game_id').selectpicker('val', game_id);
 		$("#url").val(url);
-		$("#mainForm").attr("action","/games/updateGames")
+		$("#mainForm").attr("action","/app/project/modify")
 		}
 	}

@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% set _is_first_load = true if safe_vars is not defined else false %}
+
+{% block external_head %}
+<title>report1</title>
+{% endblock %}
+
+{% block content %}
+<div class="panel panel-primary">
+            <div class="panel-body">
+                <form id="searchForm" action="" method="get">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label class="control-label" for="beginDate"> 从 </label>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="beginDate" name="beginDate" placeholder="开始日期" class="form-control beginDate" type="text" value="{{ safe_vars.beginDate if not _is_first_load }}"/>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label" for="endDate"> 到 </label>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="endDate" name="endDate" placeholder="结束日期" class="form-control endDate" type="text" value="{{ safe_vars.endDate if not _is_first_load }}"/>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label" for="game_id"> 游戏 </label>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="game_id" name="game_id" class="form-control selectpicker" data-value="{{ safe_vars.game_id|fm_null if not _is_first_load }}">
+                                {% for k,v in games.items() %}
+                                <option value="{{ k }}">{{ v|safe }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <p>&nbsp;&nbsp;</p>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label class="control-label" for="match_type"> <nobr>匹配方式</nobr>
+                            </label>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="match_type" name="match_type" class="form-control selectpicker" data-value="{{ safe_vars.match_type|fm_null if not _is_first_load }}">
+                                <option value="">全部</option>
+                                {% for k,v in match_types.items() %}
+                                    <option value="{{ k }}">{{ v|safe }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label" for="channel_id"> <nobr>渠道</nobr>
+                            </label>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="channel_id" name="channel_id" class="form-control selectpicker" data-value="{{ safe_vars.channel_id|fm_null if not _is_first_load }}" data-live-search="true">
+                                <option value="">全部</option>
+                                {% for k,v in channels.items() %}
+                                    <option value="{{ k }}">{{ v|safe }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label" for="media_id"> <nobr>媒体类型</nobr>
+                            </label>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="media_id" name="media_id" class="form-control selectpicker" data-value="{{ safe_vars.media_id|fm_null if not _is_first_load }}">
+                                <option value="">全部</option>
+                                {% for k,v in medias.items() %}
+                                    <option value="{{ k }}">{{ v|safe }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <p>&nbsp;&nbsp;</p>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label class="control-label" for="project_id"> 广告ID </label>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea id="project_id" name="project_id" style="max-width:365px" placeholder="广告ID，一行一个" class="form-control" rows="1"></textarea>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label class="control-label" for=""> </label>
+                        </div>
+                        <div class="col-md-12" style="text-align: right;">
+                            <input class="btn btn-primary" type="button" value="查询" id="btnSubmit"/>
+                        </div>
+                </div>
+                </form>
+            </div>
+        </div>
+
+{% if not _is_first_load %}
+<div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">                       
+                        <div class="col-md-3">数据</div>
+                        <div class="col-md-6"></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-14">
+                            <div style="overflow: auto; height: auto">
+                                <table class="table table-striped table-hover table-condensed table-bordered" id="mainTable">
+                                    <thead>
+                                        <tr class="active">
+                                            <th><nobr>游戏</nobr></th>
+                                            <th><nobr>日期</nobr></th>
+                                            <th><nobr>新登人数</nobr></th>
+                                            <th><nobr>cpl</nobr></th>
+                                            <th><nobr>ltv3</nobr></th>
+                                            <th><nobr>ltv5</nobr></th>
+                                            <th><nobr>ltv7</nobr></th>
+                                            <th><nobr>ltv14</nobr></th>
+                                            <th><nobr>ltv30</nobr></th>
+                                            <th><nobr>ltv60</nobr></th>
+                                            <th><nobr>ltv90</nobr></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr>
+                                                <td>
+                                                    <nobr>
+                                                        王者之剑Android
+                                                    </nobr>
+                                                </td>
+                                                <td>2016-11-27</td>
+                                                <td>0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                                <!--
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <ul class="pagination"><li><a href="./0?beginDate=2016-11-27&endDate=2016-11-27&gameId=0&adType=0&mediaType=0&mediaId=0&mediaShowType=0&adCodes=" class="disabled">首页</a></li><li class="active" ><a href="./0?beginDate=2016-11-27&endDate=2016-11-27&gameId=0&adType=0&mediaType=0&mediaId=0&mediaShowType=0&adCodes=">1</a></li><li><a href="./0?beginDate=2016-11-27&endDate=2016-11-27&gameId=0&adType=0&mediaType=0&mediaId=0&mediaShowType=0&adCodes="  class="disabled">末页</a></li></ul><h5><span class="label label-default">共16条记录</span></h5>
+
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+<div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">                       
+                        <div class="col-md-3">数据</div>
+                        <div class="col-md-6"></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-14">
+                            <div style="overflow: auto; height: auto">
+                                <table class="table table-striped table-hover table-condensed table-bordered" id="mainTable">
+                                    <thead>
+                                        <tr class="active">
+                                            <th><nobr>游戏</nobr></th>
+                                            <th><nobr>日期</nobr></th>
+                                            <th><nobr>新登人数</nobr></th>
+                                            <th><nobr>cpl</nobr></th>
+                                            <th><nobr>ltv3</nobr></th>
+                                            <th><nobr>ltv5</nobr></th>
+                                            <th><nobr>ltv7</nobr></th>
+                                            <th><nobr>ltv14</nobr></th>
+                                            <th><nobr>ltv30</nobr></th>
+                                            <th><nobr>ltv60</nobr></th>
+                                            <th><nobr>ltv90</nobr></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr>
+                                                <td>
+                                                    <nobr>
+                                                        王者之剑Android
+                                                    </nobr>
+                                                </td>
+                                                <td>2016-11-27</td>
+                                                <td>0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                                <td>0.0</td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+{% endif %}
+
+        <script src="/res/js/common/common.js"></script>
+        <script src="/res/js/home/report.js"></script>
+
+{% endblock %}

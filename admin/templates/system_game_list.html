@@ -30,34 +30,21 @@
                  </thead>
 
                  <tbody>
-                       <tr id="sort_game_id" value = "152">
-                            <td>152</td>
-                            <td>蜀山</td>
-                            <td>2015-12-07 13:49:06</td>
+                       {% for game in game_list %} 
+                       <tr id="sort_game_id" value = "{{ game.id }}">
+                           <td>{{ game.id }}</td>
+                           <td>{{ game.name|safe }}</td>
+                           <td>{{ game.add_time }}</td>
                             <td>
-                                <input type="hidden"  name="gameId" value="153"> 
-                                <input type="hidden"  name="gameName" value="蜀山">
-                                <input type="hidden" name="typeId" value="1">
+                                <input type="hidden"  name="gameId" value="{{ game.id }}"> 
+                                <input type="hidden"  name="gameName" value="{{ game.name|safe }}">
                                 <a class="btn btn-default btn-xs" data-toggle="modal" href="#popup" onclick="save(this,2);">修改</a>
                                 &nbsp;&nbsp;&nbsp;
                             <!--        <button type="button"  class="btn btn-default btn-xs" onclick="deleteRow(this,0);">删除</button> -->
                                 
                             </td>
                         </tr>
-                       <tr id="sort_game_id" value = "153">
-                            <td>153</td>
-                            <td>蜀山战纪</td>
-                            <td>2015-12-07 13:49:06</td>
-                            <td>
-                                <input type="hidden"  name="gameId" value="153"> 
-                                <input type="hidden"  name="gameName" value="蜀山战纪">
-                                <input type="hidden" name="typeId" value="1">
-                                <a class="btn btn-default btn-xs" data-toggle="modal" href="#popup" onclick="save(this,2);">修改</a>
-                                &nbsp;&nbsp;&nbsp;
-                            <!--        <button type="button"  class="btn btn-default btn-xs" onclick="deleteRow(this,0);">删除</button> -->
-                                
-                            </td>
-                        </tr>
+                        {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -70,7 +57,7 @@
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title" id="titl"></h4>
                 </div>
-                 <form id="mainForm" role="form" class="form-horizontal" action="/games" method="post">
+                <form id="mainForm" role="form" class="form-horizontal" action="/app/system/game/add" method="post">
                         <input id="gameId" name="gameId" class="form-control" type="text" value="" style="display:none"/>
                         <div class="modal-body">
                          
@@ -94,6 +81,7 @@
               </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
+        <script src="/res/js/system/games.js?random"></script>
         <script type="text/javascript">
         
         var fixHelperModified = function(e, tr) {
@@ -111,5 +99,4 @@
             }).disableSelection(); 
             
         </script>
-<script src="/res/js/system/games.js"></script>
 {% endblock %}

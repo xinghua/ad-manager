@@ -70,7 +70,7 @@ function save(obj,index){
 	if(index==1){
 		$("#gameName").val("");
 		$("#titl").text("添加游戏");
-		$("#mainForm").attr("action","/games/addGames")
+		$("#mainForm").attr("action","/app/system/game/add")
 		
 	}else if(index==2){
 		var gameId=$(obj).parent("td").parent("tr").find("input[name=gameId]").val();
@@ -81,7 +81,7 @@ function save(obj,index){
 		$("#gameId").val(gameId);
 		$("#gameId").attr('readonly',true);
 		$("#gameName").val(gameName);
-		$("#mainForm").attr("action","/games/updateGames")
+		$("#mainForm").attr("action","/app/system/game/modify")
 		}
 	}
 		

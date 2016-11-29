@@ -14,37 +14,35 @@
             </div>
             <div class="panel-body">
                 <div class="row">
+                    <form role="form" action="/app/project/list" method="get">
                     <div class="col-md-1">
                         <label class="control-label" for="gameId"><nobr>游戏</nobr></label>
                     </div>
                     <div class="col-md-3">
-                        <select class="form-control selectpicker" data-live-search="true" data-size=25 id="gameId" data-value="0">
-                            <option value="0">全部</option>
-                            
-                                <option value="1">游戏1</option>
-                            
-                                <option value="2">游戏2</option>
-
+                        <select class="form-control selectpicker" data-live-search="true" data-size=25 name="game_id" data-value="{{ safe_vars.game_id|fm_null }}">
+                            <option value="">全部</option>
+                            {% for k,v in games.items() %}    
+                                <option value="{{ k }}" >{{ v|safe }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-1">
                         <label class="control-label" for="mediaId"><nobr>渠道名称</nobr></label>
                     </div>
                     <div class="col-md-3">
-                        <select class="form-control selectpicker" data-live-search="true" data-size=25 path="mediaId" id="mediaId" data-value="0">
-                            <option value='0'>全部</option>
-                                
-                            <option value="1"> 百度 </option>
-                            
-                            <option value="2"> 新浪 </option>
-
+                        <select class="form-control selectpicker" data-live-search="true" data-size=25 name="channel_id" data-value="{{ safe_vars.channel_id|fm_null }}">
+                            <option value="">全部</option>
+                            {% for k,v in channels.items() %}    
+                                <option value="{{ k }}">{{ v|safe }}</option>
+                            {% endfor %}
                         </select>           
                     </div>
 
                     <div class="col-md-4" style="text-align: right;">   
-                        <a class="btn btn-primary" href="#" id="search">查询</a>
-                        <a class="btn btn-default" data-toggle="modal" href="#popup">添加</a>
+                        <input class="btn btn-primary" type="submit" value="查询" />
+                        <a class="btn btn-primary" data-toggle="modal" href="#popup" onclick="save(this,1);">添加</a>
                     </div>
+                    </form>
                 </div>
         </div>
 
@@ -73,51 +71,31 @@
                                    </tr>
                                  </thead>
                                  <tbody>
-                                    
+                                        {% for project in project_list %} 
                                         <tr>
-                                            <td>1</td>
-                                            <td>广告1</td>
-                                            <td>游戏1</td>
-                                            <td>IOS</td>
-                                            <td>百度免费</td>
-                                            <td>百度</td>
-                                            <td>免费</td>
-                                            <td>http://baidu.com</td>
+                                            <td>{{ project.id }}</td>
+                                            <td>{{ project.name|safe }}</td>
+                                            <td>{{ project.game_name|safe }}</td>
+                                            <td>{{ platforms[project.platform_id] }}</td>
+                                            <td>{{ project.channel_name|safe }}</td>
+                                            <td>{{ project.media_name|safe }}</td>
+                                            <td>{{ project.pay_name|safe }}</td>
+                                            <td>{{ project.url }}</td>
                                             <td>
-                                                <input type="hidden"  name="project_id" value="1"> 
-                                                <input type="hidden"  name="project_name" value="广告1">
-                                                <input type="hidden"  name="game_id" value="1">
-                                                <input type="hidden"  name="platform_id" value="1">
-                                                <input type="hidden"  name="channel_id" value="1">
-                                                <input type="hidden"  name="url" value="http://baidu.com">
+                                                <input type="hidden"  name="project_id" value="{{ project.id }}"> 
+                                                <input type="hidden"  name="project_name" value="{{ project.name|safe }}">
+                                                <input type="hidden"  name="game_id" value="{{ project.game_id }}">
+                                                <input type="hidden"  name="platform_id" value="{{ project.platform_id }}">
+                                                <input type="hidden"  name="channel_id" value="{{ project.channel_id }}">
+                                                <input type="hidden"  name="url" value="{{ project.url }}">
                                                 <a class="btn btn-default btn-xs" data-toggle="modal" href="#popup" onclick="save(this,2);">修改</a>
                                             </td>
                                         </tr>
-
-                                        <tr>
-                                            <td>2</td>
-                                            <td>广告2</td>
-                                            <td>游戏2</td>
-                                            <td>Android</td>
-                                            <td>新浪付费</td>
-                                            <td>新浪</td>
-                                            <td>付费</td>
-                                            <td>http://sina.com</td>
-                                            <td>
-                                                <input type="hidden"  name="project_id" value="1"> 
-                                                <input type="hidden"  name="project_name" value="广告2">
-                                                <input type="hidden"  name="game_id" value="2">
-                                                <input type="hidden"  name="platform_id" value="2">
-                                                <input type="hidden"  name="channel_id" value="2">
-                                                <input type="hidden"  name="url" value="http://sina.com">
-                                                <a class="btn btn-default btn-xs" data-toggle="modal" href="#popup" onclick="save(this,2);">修改</a>
-                                            </td>
-                                        </tr>
-                                    
-
+                                        {% endfor %}
  </tbody>
                           </table>
                         </div>
+                        <!--
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <ul class="pagination">
@@ -129,6 +107,7 @@
                                 <h5><span class="label label-default">共2条记录</span></h5>
                             </div>
                         </div>
+                        -->
                     </div>
                 </div>
             </div>
@@ -140,7 +119,7 @@
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title" id="titl"></h4>
                 </div>
-                 <form id="mainForm" role="form" class="form-horizontal" action="/games" method="post">
+                 <form id="mainForm" role="form" class="form-horizontal" action="/app/project/add" method="post">
                         <input id="project_id" name="project_id" class="form-control" type="text" value="" style="display:none"/>
                         <div class="modal-body">
                                 <div class="form-group">                            
@@ -158,8 +137,9 @@
                                     </label>
                                     <div class="col-md-10">                             
                                         <select id="platform_id" name="platform_id" class="form-control selectpicker">
-                                            <option value="1">IOS</option>
-                                            <option value="2">Android</option>
+                                            {% for k, v in platforms.items() %}
+                                                <option value="{{ k }}">{{ v }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>                  
                                 </div>
@@ -169,8 +149,9 @@
                                     </label>
                                     <div class="col-md-10">                             
                                         <select id="channel_id" name="channel_id" class="form-control selectpicker" data-live-search="true" data-size=25 data-value="0">
-                                            <option value="1">百度免费</option>
-                                            <option value="2">新浪付费</option>
+                                            {% for k, v in channels.items() %}
+                                                <option value="{{ k }}">{{ v }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>                  
                                 </div>
@@ -180,8 +161,9 @@
                                     </label>
                                     <div class="col-md-10">                             
                                         <select id="game_id" name="game_id" class="form-control selectpicker" data-live-search="true" data-size=25 data-value="0">
-                                            <option value="1">游戏1</option>
-                                            <option value="2">游戏2</option>
+                                            {% for k, v in games.items() %}
+                                                <option value="{{ k }}">{{ v }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>                  
                                 </div>
@@ -206,6 +188,6 @@
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
 
-<script src="/res/js/project/projects.js"></script>
+<script src="/res/js/project/projects.js?random"></script>
 {% endblock %}
 

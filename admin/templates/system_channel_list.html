@@ -10,18 +10,18 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                    <form role="form" action="/medias/page/0" method="get">
+                    <form role="form" action="/app/system/channel/list" method="get">
                         <div class="col-md-3"></div>
                         <div class="col-md-1">
-                            <label for="mediaName" class="control-label">渠道名称</label>
+                            <label for="channelName" class="control-label">渠道名称</label>
                         </div>
                         <div class="col-md-3">
-                            <input class="form-control" type="text" name="mediaName" id="mediaName" value=""
+                            <input class="form-control" type="text" name="channelName" id="channelName" value="{{ safe_vars.channelName|fm_null if safe_vars else ''}}"
                                  placeholder="支持媒体名称模糊查询" />
                         </div>
                         <div class="col-md-2">
                             <input class="btn btn-primary" type="submit" value="查询" />
-                            <a class="btn btn-default" data-toggle="modal" href="#popup">添加</a>
+                            <a class="btn btn-primary" data-toggle="modal" href="#popup" onclick="save(this,1);">添加</a>
                         </div>
                         <div class="col-md-2"></div>
                     </form>
@@ -45,34 +45,22 @@
                  </thead>
 
                  <tbody>
-                       <tr id="sort_channel_id" value = "1">
-                            <td>1</td>
-                            <td>测试渠道1</td>
-                            <td>百度</td>
-                            <td>免费</td>
-                            <td>2015-12-07 13:49:06</td>
+                        {% for channel in channel_list %}
+                        <tr id="sort_channel_id" value = "{{ channel.id }}">
+                            <td>{{ channel.id }}</td>
+                            <td>{{ channel.name|safe }}</td>
+                            <td>{{ channel.media_name|safe }}</td>
+                            <td>{{ channel.pay_name|safe }}</td>
+                            <td>{{ channel.add_time }}</td>
                             <td>
-                                <input type="hidden"  name="channel_id" value="1"> 
-                                <input type="hidden"  name="channel_name" value="测试渠道1">
-                                <input type="hidden"  name="media_type" value="1">
-                                <input type="hidden"  name="pay_type" value="1">
+                                <input type="hidden"  name="channel_id" value="{{ channel.id }}"> 
+                                <input type="hidden"  name="channel_name" value="{{ channel.name|safe }}">
+                                <input type="hidden"  name="media_type" value="{{ channel.media_type }}">
+                                <input type="hidden"  name="pay_type" value="{{ channel.pay_type }}">
                                 <a class="btn btn-default btn-xs" data-toggle="modal" href="#popup" onclick="save(this,2);">修改</a>
                             </td>
                         </tr>
-                       <tr id="sort_channel_id" value = "2">
-                            <td>1</td>
-                            <td>测试渠道1</td>
-                            <td>百度</td>
-                            <td>免费</td>
-                            <td>2015-12-07 13:49:06</td>
-                            <td>
-                                <input type="hidden"  name="channel_id" value="1"> 
-                                <input type="hidden"  name="channel_name" value="测试渠道1">
-                                <input type="hidden"  name="media_type" value="1">
-                                <input type="hidden"  name="pay_type" value="1">
-                                <a class="btn btn-default btn-xs" data-toggle="modal" href="#popup" onclick="save(this,2);">修改</a>
-                            </td>
-                        </tr>
+                        {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -85,7 +73,7 @@
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title" id="titl"></h4>
                 </div>
-                 <form id="mainForm" role="form" class="form-horizontal" action="/games" method="post">
+                 <form id="mainForm" role="form" class="form-horizontal" action="/app/system/channel/add" method="post">
                         <input id="channel_id" name="channel_id" class="form-control" type="text" value="" style="display:none"/>
                         <div class="modal-body">
                                 <div class="form-group">                            
@@ -103,11 +91,9 @@
                                     </label>
                                     <div class="col-md-10">                             
                                         <select id="media_type" name="media_type" class="form-control selectpicker">
-                                            
-                                                <option  value="1">百度</option>
-                                            
-                                                <option  value="2">新浪</option>
-                                            
+                                            {% for k,v in medias.items() %} 
+                                                <option  value="{{ k }}">{{ v }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>                  
                                 </div>
@@ -117,11 +103,9 @@
                                     </label>
                                     <div class="col-md-10">                             
                                         <select id="pay_type" name="pay_type" class="form-control selectpicker">
-                                            
-                                                <option  value="1">免费</option>
-                                            
-                                                <option  value="2">付费</option>
-                                            
+                                            {% for k,v in pays.items() %} 
+                                                <option  value="{{ k }}">{{ v }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>                  
                                 </div>
@@ -154,5 +138,5 @@
             
         </script>
 
-<script src="/res/js/system/channels.js"></script>
+<script src="/res/js/system/channels.js?cc"></script>
 {% endblock %}

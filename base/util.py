@@ -484,3 +484,28 @@ def gen_sign(*args):
 
 def check_sign(sign, *args):
     return sign == gen_sign(*args)
+
+
+def get_fuzzy_search_str(s):
+    WILDCARD = "%"
+    s = s.replace('\\', r'\\')
+    s = s.replace(r'_', r'\_')
+    s = s.replace(r'%', r'\%')
+    return WILDCARD + s + WILDCARD
+
+
+def dbresult2dict(dbresult, key, value=None):
+    if not isinstance(key, (list, tuple)):
+        if value is not None:
+            return dict(
+                [(k[key], k[value]) for k in dbresult])
+        else:
+            return dict(
+                [(k[key], k) for k in dbresult])
+    else:
+        if value is not None:
+            return dict(
+                [(tuple(k[i] for i in key), k[value]) for k in dbresult])
+        else:
+            return dict(
+                [(tuple(k[i] for i in key), k) for k in dbresult])

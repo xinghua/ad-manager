@@ -29,17 +29,13 @@
                          </thead>
                          <tbody>
                             
+                                {% for media in media_list %}
                                 <tr>
-                                    <td>1</td>
-                                    <td>效果广告</td>
-                                    <td>2016-04-15 09:52:24</td>
+                                    <td>{{ media.id }}</td>
+                                    <td>{{ media.name|safe }}</td>
+                                    <td>{{ media.add_time }}</td>
                                 </tr>
-                            
-                                <tr>
-                                    <td>2</td>
-                                    <td>免费合作</td>
-                                    <td>2016-04-15 09:52:45</td>
-                                </tr>
+                                {% endfor %}
 
                         </tbody>
                     </table>
@@ -55,7 +51,7 @@
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title">添加类型</h4>
                 </div>
-                 <form id="mainForm" role="form" class="form-horizontal" action="/types" method="post">
+                 <form id="mainForm" role="form" class="form-horizontal" action="/app/system/media/add" method="post">
                         <div class="modal-body">
                                 <div class="form-group">                            
                                     <label class="col-md-2 control-label" for="typeName">

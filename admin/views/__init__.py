@@ -5,4 +5,5 @@ __all__ = [
     "admin",
     "system",
     "project",
+    "report",
 ]

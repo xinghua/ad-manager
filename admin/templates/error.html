@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <font size="4" color="red">{{ error if error is string else "; ".join(error) }}</font>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                    &nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-2">
+                        <a class="btn btn-default" href="javascript:window.location.href=document.referrer;";">返回</a>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

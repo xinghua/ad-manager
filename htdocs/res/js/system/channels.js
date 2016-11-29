@@ -14,7 +14,7 @@ function save(obj,index){
 	if(index==1){
 		$("#channel_name").val("");
 		$("#titl").text("添加渠道");
-		$("#mainForm").attr("action","/games/addGames")
+		$("#mainForm").attr("action","/app/system/channel/add")
 		
 	}else if(index==2){
 		var channel_id=$(obj).parent("td").parent("tr").find("input[name=channel_id]").val();
@@ -29,7 +29,7 @@ function save(obj,index){
 		$("#channel_name").val(channel_name);
 		$('#media_type').selectpicker('val', media_type);
 		$('#pay_type').selectpicker('val', pay_type);
-		$("#mainForm").attr("action","/games/updateGames")
+		$("#mainForm").attr("action","/app/system/channel/modify")
 		}
 	}
 		
