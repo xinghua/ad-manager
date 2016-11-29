@@ -2,6 +2,7 @@
 # -*- coding:utf8 -*-
 import redis
 from werkzeug.local import LocalProxy
+import MySQLdb
 
 from etc import config
 from base import poolmysql, smartpool
@@ -29,3 +30,8 @@ db_redis = redis.StrictRedis(
         max_connections=config.redis_max_connections, **config.redis_config
     )
 )
+
+def get_cursor():
+    cursor = MySQLdb.connect(**config.db_config["db_writer"]).cursor()
+    cursor.execute("set @@autocommit=1")
+    return cursor

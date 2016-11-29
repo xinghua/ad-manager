@@ -79,3 +79,9 @@ function save(obj,index){
 		$("#mainForm").attr("action","/app/project/modify")
 		}
 	}
+
+function gen_code(obj){
+    var adcode=$(obj).parent("td").parent("tr").find("input[name=adcode]").val();
+    $("#adcode").val(adcode);
+    $("#adcode").attr('readonly',true);
+}

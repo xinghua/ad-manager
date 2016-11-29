@@ -50,6 +50,13 @@ def project_list(safe_vars):
         "project.*, game.name as game_name, channel.name as channel_name, \
          media.name as media_name, intermodal.name as pay_name"
     )
+    for project in project_list:
+        project_id, code_type = project["id"], cfg.CODE.CODE_TYPE_CLICK
+        project["adcode"] = util.url_query_update("http://%s/app/click" % sfg.AD_CODE.DOMAIN, {
+            "project_id": project_id,
+            "code_type": code_type,
+            "s": util.gen_sign(project_id, code_type),
+        })
 
     games = util.dbresult2dict(QS(db).table(T.game).select(), "id", "name")
     channels = util.dbresult2dict(QS(db).table(T.channel).select(), "id", "name")

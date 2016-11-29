@@ -8,7 +8,7 @@
 {% block content %}
 <div class="panel panel-primary">
             <div class="panel-body">
-                <form id="searchForm" action="" method="get">
+                <form id="searchForm" action="/app/report/{{ report_name }}/query" method="get">
                     <div class="row">
                         <div class="col-md-1">
                             <label class="control-label" for="beginDate"> 从 </label>
@@ -87,7 +87,7 @@
                             <label class="control-label" for=""> </label>
                         </div>
                         <div class="col-md-12" style="text-align: right;">
-                            <input class="btn btn-primary" type="button" value="查询" id="btnSubmit"/>
+                            <input class="btn btn-primary" type="submit" value="查询" id="btnSubmit"/>
                         </div>
                 </div>
                 </form>
@@ -95,10 +95,11 @@
         </div>
 
 {% if not _is_first_load %}
+{% for table in result %}
 <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">                       
-                        <div class="col-md-3">数据</div>
+                        <div class="col-md-3">{{ table.name }}</div>
                         <div class="col-md-6"></div>
                     </div>
                 </div>
@@ -109,37 +110,19 @@
                                 <table class="table table-striped table-hover table-condensed table-bordered" id="mainTable">
                                     <thead>
                                         <tr class="active">
-                                            <th><nobr>游戏</nobr></th>
-                                            <th><nobr>日期</nobr></th>
-                                            <th><nobr>新登人数</nobr></th>
-                                            <th><nobr>cpl</nobr></th>
-                                            <th><nobr>ltv3</nobr></th>
-                                            <th><nobr>ltv5</nobr></th>
-                                            <th><nobr>ltv7</nobr></th>
-                                            <th><nobr>ltv14</nobr></th>
-                                            <th><nobr>ltv30</nobr></th>
-                                            <th><nobr>ltv60</nobr></th>
-                                            <th><nobr>ltv90</nobr></th>
+                                            {% for item in table.title %}
+                                            <th><nobr>{{ item }}</nobr></th>
+                                            {% endfor %}
                                         </tr>
                                     </thead>
                                     <tbody>
+                                            {% for data in table.data %}
                                             <tr>
-                                                <td>
-                                                    <nobr>
-                                                        王者之剑Android
-                                                    </nobr>
-                                                </td>
-                                                <td>2016-11-27</td>
-                                                <td>0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
+                                                {% for num in data %}
+                                                <td>{{ num }}</td>
+                                                {% endfor %}
                                             </tr>
+                                            {% endfor %}
                                     </tbody>
                                 </table>
                                 <!--
@@ -155,61 +138,9 @@
                     </div>
                 </div>
         </div>
-<div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">                       
-                        <div class="col-md-3">数据</div>
-                        <div class="col-md-6"></div>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-14">
-                            <div style="overflow: auto; height: auto">
-                                <table class="table table-striped table-hover table-condensed table-bordered" id="mainTable">
-                                    <thead>
-                                        <tr class="active">
-                                            <th><nobr>游戏</nobr></th>
-                                            <th><nobr>日期</nobr></th>
-                                            <th><nobr>新登人数</nobr></th>
-                                            <th><nobr>cpl</nobr></th>
-                                            <th><nobr>ltv3</nobr></th>
-                                            <th><nobr>ltv5</nobr></th>
-                                            <th><nobr>ltv7</nobr></th>
-                                            <th><nobr>ltv14</nobr></th>
-                                            <th><nobr>ltv30</nobr></th>
-                                            <th><nobr>ltv60</nobr></th>
-                                            <th><nobr>ltv90</nobr></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                            <tr>
-                                                <td>
-                                                    <nobr>
-                                                        王者之剑Android
-                                                    </nobr>
-                                                </td>
-                                                <td>2016-11-27</td>
-                                                <td>0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                                <td>0.0</td>
-                                            </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
+{% endfor %}
 {% endif %}
 
         <script src="/res/js/common/common.js"></script>
-        <script src="/res/js/home/report.js"></script>
 
 {% endblock %}

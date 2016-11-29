@@ -376,7 +376,7 @@ def url_query_update(url, update_query):
     'http://xxxx?a=ab&rid=xvfg&b=bb#fragment'
     """
     scheme, netloc, path, query_string, fragment = urlparse.urlsplit(url)
-    query = parse_qs(query_string)
+    query = urlparse.parse_qs(query_string)
     query.update(update_query)
     updated_query_string = urllib.urlencode(query, True)
     return urlparse.urlunsplit((scheme, netloc, path, updated_query_string, fragment))
@@ -479,7 +479,7 @@ def gen_sign_by_hmac(secret_key, data):
 def gen_sign(*args):
     data = [str(k) for k in args]
     data.append(sfg.SIGN.DATA_RID)
-    return util.gen_sign_by_hmac(sfg.SIGN.KEY, "\n".join(data))
+    return gen_sign_by_hmac(sfg.SIGN.KEY, "\n".join(data))
 
 
 def check_sign(sign, *args):

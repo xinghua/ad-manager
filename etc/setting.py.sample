@@ -21,3 +21,24 @@ class FILE_LOCK(object):
 class SIGN(object):
     KEY = "xxx"
     DATA_RID = "xxx"
+
+class REPORT(object):
+    WIDGET_CONFIG = {
+        "1": {"name": "广告效果1", "widget": [1]},
+        "2": {"name": "广告效果2", "widget": [2]},
+        "3": {"name": "广告效果3", "widget": [3]},
+        "4": {"name": "广告效果4", "widget": [4]},
+        "5": {"name": "广告效果5", "widget": [5]},
+        "6": {"name": "广告效果6", "widget": [6,7]},
+        "7": {"name": "广告效果7", "widget": [8]},
+    }
+
+    DIM_TYPES = {
+        "match_type": 1,
+        "media_id": 4,
+        "channel_id": 5,
+        "project_id": 6,
+    }
+
+class AD_CODE(object):
+    DOMAIN = "adlog.dev.com"
