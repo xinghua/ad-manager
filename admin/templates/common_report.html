@@ -14,13 +14,13 @@
                             <label class="control-label" for="beginDate"> 从 </label>
                         </div>
                         <div class="col-md-3">
-                            <input id="beginDate" name="beginDate" placeholder="开始日期" class="form-control beginDate" type="text" value="{{ safe_vars.beginDate if not _is_first_load }}"/>
+                            <input id="beginDate" name="beginDate" placeholder="开始日期" class="form-control beginDate" type="text" value="{{ safe_vars.beginDate|fm_date if not _is_first_load }}"/>
                         </div>
                         <div class="col-md-1">
                             <label class="control-label" for="endDate"> 到 </label>
                         </div>
                         <div class="col-md-3">
-                            <input id="endDate" name="endDate" placeholder="结束日期" class="form-control endDate" type="text" value="{{ safe_vars.endDate if not _is_first_load }}"/>
+                            <input id="endDate" name="endDate" placeholder="结束日期" class="form-control endDate" type="text" value="{{ safe_vars.endDate|fm_date if not _is_first_load }}"/>
                         </div>
                         <div class="col-md-1">
                             <label class="control-label" for="game_id"> 游戏 </label>
@@ -97,12 +97,29 @@
 {% if not _is_first_load %}
 {% for table in result %}
 <div class="panel panel-primary">
-                <div class="panel-heading">
+                <div class="panel-heading">                 
                     <div class="row">                       
-                        <div class="col-md-3">{{ table.name }}</div>
-                        <div class="col-md-6"></div>
+                        <div class="col-md-3">
+                            {{ table.name }}
+                        </div>
+                        <div class="col-md-7">
+                            
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row">                       
+                                <div class="col-md-8">
+                                </div>
+                                <div class="col-md-2">
+                                    <a class="btn btn-primary btn-xs" id="btnExport" href="/app/report/{{ table.id}}/download?beginDate={{safe_vars.beginDate|fm_date}}&endDate={{safe_vars.endDate|fm_date}}&game_id={{safe_vars.game_id}}&match_type={{safe_vars.match_type|fm_null}}&channel_id={{safe_vars.channel_id|fm_null}}&media_id={{safe_vars.media_id|fm_null}}&project_id={{safe_vars.project_id|fm_null}}" title="导出">导出</a>
+                                </div>                          
+                                <div class="col-md-2">
+                                </div>
+                            </div>                                                          
+                        </div>
                     </div>
                 </div>
+                </div>
+
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-14">

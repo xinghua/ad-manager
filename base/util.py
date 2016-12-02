@@ -16,6 +16,8 @@ import errno
 import hashlib
 import hmac
 import base64
+from StringIO import StringIO
+import re
 
 from etc import config
 from etc import setting as sfg
@@ -509,3 +511,23 @@ def dbresult2dict(dbresult, key, value=None):
         else:
             return dict(
                 [(tuple(k[i] for i in key), k) for k in dbresult])
+
+
+def dump_data_as_txt(title_list, data_list, sep_field="\t", sep_row="\r\n"):
+    output = StringIO()
+    output.write(sep_field.join(title_list))
+    output.write(sep_row)
+
+    SEP_CHAR = r"\r?\n"
+    for row in data_list:
+        normalized_row = []
+        for col in row:
+            if isinstance(col, unicode):
+                col = col.encode(config.encoding)
+            col = str(col)
+            normalized_row.append(re.sub(SEP_CHAR, " ", col))
+
+        output.write(sep_field.join(normalized_row))
+        output.write(sep_row)
+
+    return output.getvalue() 

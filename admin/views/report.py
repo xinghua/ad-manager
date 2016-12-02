@@ -57,7 +57,7 @@ def report_test_load():
 @report.route("/report/test/query", methods=["GET"])
 @general("report test query")
 @form_check({
-    "beginDate": F_datetime(u"begin date", format="%Y-%m-%d") & "strict" & "required",
+    "beginDate": F_datetime(u"日期", format="%Y-%m-%d") & "strict" & "required",
     "game_id": F_int(u"game id") & "strict" & "required",
     "match_type": F_int(u"match_type") & "strict" & "optional",
     "channel_id": F_int(u"channel id") & "strict" & "optional",
@@ -106,8 +106,8 @@ def report_load(report_name):
 @report.route("/report/<report_name>/query", methods=["GET"])
 @general("report query")
 @form_check({
-    "beginDate": F_datetime(u"begin date", format="%Y-%m-%d") & "strict" & "required",
-    "endDate": F_datetime(u"end date", format="%Y-%m-%d") & "strict" & "required",
+    "beginDate": F_datetime(u"开始日期", format="%Y-%m-%d") & "strict" & "required",
+    "endDate": F_datetime(u"结束日期", format="%Y-%m-%d") & "strict" & "required",
     "game_id": F_int(u"game id") & "strict" & "required",
     "match_type": F_int(u"match_type") & "strict" & "optional",
     "channel_id": F_int(u"channel id") & "strict" & "optional",
@@ -123,18 +123,13 @@ def report_query(safe_vars, report_name):
 
     result = []
     for widget_id in sfg.REPORT.WIDGET_CONFIG[report_name]["widget"]:
-        print begin_date
-        print end_date
-        print game_alias
-        print dim_dict
-        print widget_id
-
         title, data = get_data(begin_date, end_date, game_alias, dim_dict, widget_id)
         #title, data = ["新增", "注册"], [[1,1], [2,2]]
         result.append({
             "name": widget_config[widget_id]["name"],
             "title": title,
             "data": data,
+            "id": widget_id,
         })
 
     games = util.dbresult2dict(QS(db).table(T.game).select(), "id", "name")
@@ -149,3 +144,28 @@ def report_query(safe_vars, report_name):
         match_types = match_types,
         result = result,
     )
+
+
+@report.route("/report/<int:table_id>/download", methods=["GET"])
+@general("report query")
+@form_check({
+    "beginDate": F_datetime(u"开始日期", format="%Y-%m-%d") & "strict" & "required",
+    "endDate": F_datetime(u"结束日期", format="%Y-%m-%d") & "strict" & "required",
+    "game_id": F_int(u"game id") & "strict" & "required",
+    "match_type": F_int(u"match_type") & "strict" & "optional",
+    "channel_id": F_int(u"channel id") & "strict" & "optional",
+    "media_id": F_int(u"media id") & "strict" & "optional",
+    "project_id": F_int(u"project_id") & "strict" & "optional",
+})
+def table_download(safe_vars, table_id):
+    db = db_reader
+
+    begin_date, end_date = safe_vars["beginDate"].date(), safe_vars["endDate"].date()
+    game_alias = "game%s" % safe_vars["game_id"]
+    dim_dict = get_dim_dict(safe_vars)
+
+    title, data = get_data(begin_date, end_date, game_alias, dim_dict, table_id)
+    file_name = "%s.txt" % widget_config[table_id]["name"]
+    file_content = util.dump_data_as_txt(title, data)
+
+    return DumpFileResponse(file_name, file_content)

@@ -27,7 +27,7 @@ widget_config = {
         }
     },
     3:{'index_list':[5,7],
-       'table_head_list':head_list1,
+       'table_head_list':head_list2,
        'name': '新增ltv',
        'distribution_dim':{
         'dim':0,
@@ -36,7 +36,7 @@ widget_config = {
         }
     },
     4:{'index_list':[5,9],
-       'table_head_list':head_list1,
+       'table_head_list':head_list2,
        'name': '新增充值额',
        'distribution_dim':{
         'dim':0,
@@ -45,7 +45,7 @@ widget_config = {
         }
     },
     5:{'index_list':[5,10],
-       'table_head_list':head_list1,
+       'table_head_list':head_list2,
        'name': '新增充值率',
        'distribution_dim':{
         'dim':0,
@@ -155,18 +155,18 @@ def get_data(begin_date, end_date, game_alias, dim_dict, widget_id):
     select index_id, sum(index_value) from %s a, ad_manager.base_index b 
     where a.index_id = b.id and is_accumulated=1 and %s and index_id in (%s) and date_id between %s and %s group by index_id
     union all 
-    select aa.id, aa.v/bb.v from 
-    (select c.id, sum(index_value) as v 
+    select aa.id, sum(aa.v)/sum(bb.v) from 
+    (select c.id, a.date_id, index_value as v 
     from %s a, ad_manager.base_index c 
     where %s and c.id in (%s) and date_id between %s and %s 
     and index_id = c.numerator and c.is_accumulated=0 
-    group by c.id) aa, 
-    (select c.id, sum(index_value) as v  
+    ) aa, 
+    (select c.id, a.date_id, index_value as v  
     from %s a, ad_manager.base_index c 
     where %s and c.id in (%s) and date_id between %s and %s
     and index_id = c.denominator and c.is_accumulated=0 
-    group by c.id) bb 
-    where aa.id = bb.id
+    ) bb 
+    where aa.id = bb.id and aa.date_id=bb.date_id group by aa.id
     """%(table_name, where_sql, index_list_str, begin_date_id, end_date_id,\
          table_name, where_sql, index_list_str, begin_date_id, end_date_id,\
          table_name, where_sql, index_list_str, begin_date_id, end_date_id))
@@ -199,17 +199,17 @@ def get_data(begin_date, end_date, game_alias, dim_dict, widget_id):
         distribution_index = widget_config[widget_id]['distribution_dim']['index_id']
         dim_type_list.append(distribution_dim)
         dim_type_list.sort()
-        table_name = "dw.dw_%s_day" % (game_alias)
+        table_name2 = "dw.dw_%s_day" % (game_alias)
         for dim_type in dim_type_list:
-            table_name += "_%s" % dim_type
+            table_name2 += "_%s" % dim_type
             
         if 4 in dim_dict and 5 not in dim_dict:
-            base_table_name = "dw.dw_%s_day" % (game_alias)
+            base_table_name2 = "dw.dw_%s_day" % (game_alias)
             for dim_type in dim_type_list:
                 if dim_type == 4:
-                    base_table_name += "_5"
+                    base_table_name2 += "_5"
                 else:
-                    base_table_name += "_%s" % dim_type
+                    base_table_name2 += "_%s" % dim_type
             
             cursor.execute("""
             create temporary table %s(
@@ -218,14 +218,14 @@ def get_data(begin_date, end_date, game_alias, dim_dict, widget_id):
             index_value double,
             dim_%s int
             )
-            """%(table_name, distribution_dim))
+            """%(table_name2, distribution_dim))
             cursor.execute("""
             insert into %s select date_id, index_id, sum(index_value), dim_%s
             from %s a, ad_manager.channel b, ad_manager.base_index c 
             where %s and date_id between %s and %s and a.dim_5 = b.id and index_id in (%s) 
             and index_id = c.id and c.is_accumulated=1
             group by date_id, index_id, dim_%s
-            """%(table_name, distribution_dim, base_table_name, where_sql.replace('dim_4', 'b.media_type'), \
+            """%(table_name2, distribution_dim, base_table_name2, where_sql.replace('dim_4', 'b.media_type'), \
                  begin_date_id, end_date_id, index_list_str, distribution_dim))
             
             cursor.execute("""
@@ -236,64 +236,43 @@ def get_data(begin_date, end_date, game_alias, dim_dict, widget_id):
             where %s and date_id between %s and %s and a.dim_5 = b.id and c.id in (%s) 
             and index_id = c.numerator and c.is_accumulated=0 
             group by date_id, c.id, dim_%s) aa, 
-            (select date_id, c.id, sum(index_value) as v, dim_%s  
+            (select date_id, c.id, sum(index_value) as v 
             from %s a, ad_manager.channel b, ad_manager.base_index c 
             where %s and date_id between %s and %s and a.dim_5 = b.id and c.id in (%s) 
             and index_id = c.denominator and c.is_accumulated=0 
-            group by date_id, c.id, dim_%s) bb 
-            where aa.id = bb.id and aa.date_id=bb.date_id and aa.dim_%s=bb.dim_%s
-            """%(table_name, distribution_dim, distribution_dim, base_table_name, where_sql.replace('dim_4', 'b.media_type'), \
-                 begin_date_id, end_date_id, index_list_str, distribution_dim, distribution_dim, base_table_name, where_sql.replace('dim_4', 'b.media_type'), \
-                 begin_date_id, end_date_id, index_list_str, distribution_dim))
+            group by date_id, c.id) bb 
+            where aa.id = bb.id and aa.date_id=bb.date_id
+            """%(table_name2, distribution_dim, distribution_dim, base_table_name2, where_sql.replace('dim_4', 'b.media_type'), \
+                 begin_date_id, end_date_id, index_list_str, distribution_dim, base_table_name, where_sql.replace('dim_4', 'b.media_type'), \
+                 begin_date_id, end_date_id, index_list_str))
             where_sql = '1=1'
         
         cursor.execute("""
         select date_id, dim_%s, index_value from %s where %s and index_id = %s and date_id between %s and %s
-        """%(distribution_dim, table_name, where_sql,  distribution_index, begin_date_id, end_date_id))
+        """%(distribution_dim, table_name2, where_sql,  distribution_index, begin_date_id, end_date_id))
         datas = cursor.fetchall()
         data_dict2 = {}
         for data in datas:
             data_dict2[(data[0], data[1])] = data[2]
             
-        print """
-        select dim_%s as dim_id, sum(index_value) from %s a, ad_manager.base_index b 
-        where a.index_id = b.id and is_accumulated=1 and %s and index_id = %s and date_id between %s and %s group by dim_id
-        union all 
-        select aa.dim_id, aa.v/bb.v from 
-        (select dim_%s as dim_id, sum(index_value) as v 
-        from %s a, ad_manager.base_index c 
-        where %s and c.id = %s and date_id between %s and %s 
-        and index_id = c.numerator and c.is_accumulated=0 
-        group by dim_id) aa, 
-        (select dim_%s as dim_id, sum(index_value) as v  
-        from %s a, ad_manager.base_index c 
-        where %s and c.id = %s and date_id between %s and %s
-        and index_id = c.denominator and c.is_accumulated=0 
-        group by dim_id) bb 
-        where aa.dim_id = bb.dim_id
-        """%(distribution_dim, table_name, where_sql, distribution_index, begin_date_id, end_date_id,\
-             distribution_dim, table_name, where_sql, distribution_index, begin_date_id, end_date_id,\
-             distribution_dim, table_name, where_sql, distribution_index, begin_date_id, end_date_id)
-        
         cursor.execute("""
         select dim_%s as dim_id, sum(index_value) from %s a, ad_manager.base_index b 
         where a.index_id = b.id and is_accumulated=1 and %s and index_id = %s and date_id between %s and %s group by dim_id
         union all 
-        select aa.dim_id, aa.v/bb.v from 
-        (select dim_%s as dim_id, sum(index_value) as v 
+        select aa.dim_id, sum(aa.v)/sum(bb.v) from 
+        (select dim_%s as dim_id, a.date_id, index_value as v 
         from %s a, ad_manager.base_index c 
         where %s and c.id = %s and date_id between %s and %s 
         and index_id = c.numerator and c.is_accumulated=0 
-        group by dim_id) aa, 
-        (select dim_%s as dim_id, sum(index_value) as v  
+        ) aa, 
+        (select a.date_id, index_value as v  
         from %s a, ad_manager.base_index c 
         where %s and c.id = %s and date_id between %s and %s
         and index_id = c.denominator and c.is_accumulated=0 
-        group by dim_id) bb 
-        where aa.dim_id = bb.dim_id
-        """%(distribution_dim, table_name, where_sql, distribution_index, begin_date_id, end_date_id,\
-             distribution_dim, table_name, where_sql, distribution_index, begin_date_id, end_date_id,\
-             distribution_dim, table_name, where_sql, distribution_index, begin_date_id, end_date_id))
+        ) bb where aa.date_id = bb.date_id group by aa.dim_id
+        """%(distribution_dim, table_name2, where_sql, distribution_index, begin_date_id, end_date_id,\
+             distribution_dim, table_name2, where_sql, distribution_index, begin_date_id, end_date_id,\
+             table_name, where_sql, distribution_index, begin_date_id, end_date_id))
         datas = cursor.fetchall()
         data_summary_dict2 = {}
         for data in datas:
@@ -334,3 +313,8 @@ def get_data(begin_date, end_date, game_alias, dim_dict, widget_id):
     cursor.connection.close()
     cursor.close()
     return widget_config[widget_id]['table_head_list'], return_list
+
+if __name__ == "__main__":                
+    import datetime
+    print get_data(datetime.date(2016,11,1), datetime.date(2016,11,7), 'game1', {}, 2)           
+    
