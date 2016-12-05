@@ -21,6 +21,7 @@ class FILE_LOCK(object):
 class SIGN(object):
     KEY = "xxx"
     DATA_RID = "xxx"
+    MD5_SALT = "xxx"
 
 class REPORT(object):
     WIDGET_CONFIG = {

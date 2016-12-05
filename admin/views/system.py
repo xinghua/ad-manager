@@ -27,6 +27,7 @@ system = Blueprint("system", __name__)
 
 @system.route("/system/game/list", methods=["GET"])
 @general("system game list")
+@admin_required()
 def system_game_list():
     db = db_reader
     game_list = QS(db).table(T.game).select()
@@ -37,6 +38,7 @@ def system_game_list():
 
 @system.route("/system/game/add", methods=["POST"])
 @general("system game add")
+@admin_required()
 @form_check({
     "gameName": F_str(u"game name") & "strict" & "required",
 })
@@ -57,6 +59,7 @@ def system_game_add(safe_vars):
 
 @system.route("/system/game/modify", methods=["POST"])
 @general("system game modify")
+@admin_required()
 @form_check({
     "gameId": F_int(u"game id") & "strict" & "required",
     "gameName": F_str(u"game name") & "strict" & "required",
@@ -80,6 +83,7 @@ def system_game_modify(safe_vars):
 
 @system.route("/system/media/list", methods=["GET"])
 @general("system media list")
+@admin_required()
 def system_media_list():
     db = db_reader
     media_list = QS(db).table(T.media).select()
@@ -90,6 +94,7 @@ def system_media_list():
 
 @system.route("/system/media/add", methods=["POST"])
 @general("system media add")
+@admin_required()
 @form_check({
     "typeName": F_str(u"type name") & "strict" & "required",
 })
@@ -110,6 +115,7 @@ def system_media_add(safe_vars):
 
 @system.route("/system/pay/list", methods=["GET"])
 @general("system pay list")
+@admin_required()
 def system_pay_list():
     db = db_reader
     pay_list = QS(db).table(T.intermodal).select()
@@ -120,6 +126,7 @@ def system_pay_list():
 
 @system.route("/system/pay/add", methods=["POST"])
 @general("system pay add")
+@admin_required()
 @form_check({
     "typeName": F_str(u"type name") & "strict" & "required",
 })
@@ -140,6 +147,7 @@ def system_pay_add(safe_vars):
 
 @system.route("/system/channel/list", methods=["GET"])
 @general("system channel list")
+@admin_required()
 @form_check({
     "channelName": F_str(u"channel name") & "strict" & "optional",
 })
@@ -169,6 +177,7 @@ def system_channel_list(safe_vars):
 
 @system.route("/system/channel/add", methods=["POST"])
 @general("system channel add")
+@admin_required()
 @form_check({
     "channel_name": F_str(u"channel name") & "strict" & "required",
     "media_type": F_int(u"media type") & "strict" & "required",
@@ -193,6 +202,7 @@ def system_channel_add(safe_vars):
 
 @system.route("/system/channel/modify", methods=["POST"])
 @general("system channel modify")
+@admin_required()
 @form_check({
     "channel_id": F_str(u"channel id") & "strict" & "required",
     "channel_name": F_str(u"channel name") & "strict" & "required",

@@ -23,23 +23,55 @@ from base.poolmysql import *
 admin = Blueprint("admin", __name__)
 
 
-@admin.route("/home/login", methods=["GET"])
-@general("home login")
-def home_login():
+@admin.route("/home/login/load", methods=["GET"])
+@general("home login load")
+@admin_required(strict_login=False)
+def home_login_load(logined):
+    if logined:
+        return Redirect(url_for("admin.home_main"))
     return TempResponse("home_login.html")
+
+
+@admin.route("/home/login", methods=["POST"])
+@general("home login")
+@form_check({
+    "username": F_str(u"用户名") & "strict" & "required",
+    "password": F_str(u"密码") & "strict" & "required",
+})
+def home_login(safe_vars):
+    db = db_reader
+
+    user_info = QS(db).table(T.admin).where(
+        (F.name == safe_vars["username"]) & \
+        (F.password == safe_vars["password"])
+    ).select_one()
+    if user_info is None:
+        return ErrorResponse("用户名或密码错误")
+
+    session[cfg.SESSION.KEY_USERID] = user_info["id"]
+    session[cfg.SESSION.KEY_USERNAME] = user_info["name"]
+
+    return Redirect(url_for("admin.home_main"))
+
 
 @admin.route("/home/main", methods=["GET"])
 @general("home main")
+@admin_required()
 def home_main():
     return TempResponse("home_main.html")
 
+
 @admin.route("/home/welcome", methods=["GET"])
 @general("home welcome")
+@admin_required()
 def home_welcome():
     return "welcome"
 
-@admin.route("/home/report", methods=["GET"])
-@general("home report")
-def home_report():
-    return "report"
 
+@admin.route("/home/logout", methods=["GET"])
+@general("home logout")
+@admin_required()
+def home_exit():
+    db = db_reader
+    session.clear()
+    return Redirect(url_for("admin.home_login_load"))

@@ -5,8 +5,8 @@
 """
 
 class SESSION(object):
-    KEY_ID = "id"
-
+    KEY_USERID = "userid"
+    KEY_USERNAME = "username"
     PROJECT_COOKIE_NAME = "ad_manager"
 
 

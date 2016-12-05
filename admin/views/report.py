@@ -38,6 +38,7 @@ def get_dim_dict(safe_vars):
 
 @report.route("/report/teset/load", methods=["GET"])
 @general("report test load")
+@admin_required()
 def report_test_load():
     db = db_reader
 
@@ -56,6 +57,7 @@ def report_test_load():
 
 @report.route("/report/test/query", methods=["GET"])
 @general("report test query")
+@admin_required()
 @form_check({
     "beginDate": F_datetime(u"日期", format="%Y-%m-%d") & "strict" & "required",
     "game_id": F_int(u"game id") & "strict" & "required",
@@ -86,6 +88,7 @@ def report_test_query(safe_vars):
 
 @report.route("/report/<report_name>/load", methods=["GET"])
 @general("report load")
+@admin_required()
 def report_load(report_name):
     db = db_reader
 
@@ -105,6 +108,7 @@ def report_load(report_name):
 
 @report.route("/report/<report_name>/query", methods=["GET"])
 @general("report query")
+@admin_required()
 @form_check({
     "beginDate": F_datetime(u"开始日期", format="%Y-%m-%d") & "strict" & "required",
     "endDate": F_datetime(u"结束日期", format="%Y-%m-%d") & "strict" & "required",
@@ -148,6 +152,7 @@ def report_query(safe_vars, report_name):
 
 @report.route("/report/<int:table_id>/download", methods=["GET"])
 @general("report query")
+@admin_required()
 @form_check({
     "beginDate": F_datetime(u"开始日期", format="%Y-%m-%d") & "strict" & "required",
     "endDate": F_datetime(u"结束日期", format="%Y-%m-%d") & "strict" & "required",

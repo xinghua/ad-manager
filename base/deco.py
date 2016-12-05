@@ -26,10 +26,7 @@ from base.framework import *
 
 __all__ = [
     "general",
-    "db_conn",
     "form_check",
-    "ip_limit",
-
     "admin_required",
 ]
 
@@ -50,31 +47,6 @@ def general(desc):
         new_handler.is_handler = True
         return new_handler
 
-    return deco
-
-
-def db_conn(db_name_or_list_or_dict, dict_name="db_dict"):
-    def deco(old_handler):
-        @functools.wraps(old_handler)
-        def new_handler(*args, **kwargs):
-            params = {}
-            if isinstance(db_name_or_list_or_dict, dict):
-                buf = {}
-                for k, v in db_name_or_list_or_dict.iteritems():
-                    buf[k] = smartpool.ConnectionProxy(v)
-                params[dict_name] = buf
-
-            elif isinstance(db_name_or_list_or_dict, list):
-                for k in db_name_or_list_or_dict:
-                    params[k] = smartpool.ConnectionProxy(k)
-
-            else:
-                k = db_name_or_list_or_dict
-                params[k] = smartpool.ConnectionProxy(k)
-
-            kwargs.update(params)
-            return old_handler(*args, **kwargs)
-        return new_handler
     return deco
 
 
@@ -121,21 +93,21 @@ def admin_required(strict_login=True):
         @functools.wraps(old_handler)
         def new_handler(*args, **kwargs):
             db = db_reader
+
+            logined = False
+            if session.get(cfg.SESSION.KEY_USERID) and session.get(cfg.SESSION.KEY_USERNAME):
+                logined = True
+
+            if not strict_login:
+                kwargs.update({
+                    "logined": logined,
+                })
+                return old_handler(*args, **kwargs)
+
+            if not logined:
+                return Redirect(url_for("admin.home_login_load"))
+
             resp = old_handler(*args, **kwargs)
             return resp
-        return new_handler
-    return new_deco
-
-
-def ip_limit(ip_list, err_resp, remote_addr=False):
-    def new_deco(old_handler):
-        @functools.wraps(old_handler)
-        def new_handler(*args, **kwargs):
-            cip = request.remote_addr if remote_addr else client_ip()
-            if cip not in ip_list:
-                return err_resp
-
-            return old_handler(*args, **kwargs)
-
         return new_handler
     return new_deco

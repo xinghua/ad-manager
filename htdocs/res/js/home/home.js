@@ -1,3 +1,15 @@
+$(function(){
+    $("#loginForm").validate({
+    	rules:{
+    		username:"required",
+    		password:"required",
+    	},
+    	messages:{
+    		username:"用户名不能为空",
+    		password:"密码不能为空",
+    	}		        	
+    });
+});
 //指定iframe高度
 $("#mainFrame").load(function(){
        //$(this).height(10000); 
@@ -26,7 +38,7 @@ $("[id^=menuSub]").click(function(){
 
 //展开所有菜单
 $("[id^=menuMain]").collapse("show");
-$("[id^=menuSub]").click();			    
+$("[id=menuSub1]").click();			    
 
 
 

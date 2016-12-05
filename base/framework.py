@@ -164,18 +164,6 @@ class InfoResponse(TempResponse, JsonResponse):
         if is_xhr():
             return JsonResponse._output(self)
 
-        if request.method == "POST":
-            try:
-                redirect_id = uuid.uuid4().hex
-                db_redis.setex("temp_resp_%s" % redirect_id, TEMP_TIME, simplejson.dumps(self._json))
-                redirect_url = url_query_update(url_for("common.redirect_render"), {
-                    "redirect_id": redirect_id,
-                    "pat": self.__output_pat__
-                })
-                return redirect(redirect_url, 302)
-            except:
-                pass
-
         return TempResponse._output(self)
 
 
@@ -275,28 +263,3 @@ class ImageFileResponse(Response):
 
     def _output(self):
         return self._content
-
-
-class RedisTemplateBytecodeCache(BytecodeCache):
-    CACHE_TTL = 600
-
-    def __init__(self, redis_client):
-        self.client = redis_client
-
-    def key(self, k):
-        return '%s_%s' % ("jinjia_temp", k)
-
-    def load_bytecode(self, bucket):
-        bc = self.client.get(self.key(bucket.key))
-        if bc:
-            bucket.bytecode_from_string(bc)
-
-    def dump_bytecode(self, bucket):
-        self.client.setex(
-            self.key(bucket.key),
-            RedisTemplateBytecodeCache.CACHE_TTL,
-            bucket.bytecode_to_string()
-        )
-
-    def clear(self):
-        pass

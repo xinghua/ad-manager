@@ -27,6 +27,7 @@ project = Blueprint("project", __name__)
 
 @project.route("/project/list", methods=["GET"])
 @general("project list")
+@admin_required()
 @form_check({
     "game_id": F_str(u"game id") & "strict" & "optional",
     "channel_id": F_int(u"channel id") & "strict" & "optional",
@@ -71,6 +72,7 @@ def project_list(safe_vars):
 
 @project.route("/project/add", methods=["POST"])
 @general("project add")
+@admin_required()
 @form_check({
     "project_name": F_str(u"project name") & "strict" & "required",
     "platform_id": F_int(u"platform id") & "strict" & "required",
@@ -99,6 +101,7 @@ def project_add(safe_vars):
 
 @project.route("/project/modify", methods=["POST"])
 @general("project modify")
+@admin_required()
 @form_check({
     "project_id": F_int(u"project id") & "strict" & "required",
     "project_name": F_str(u"project name") & "strict" & "required",
