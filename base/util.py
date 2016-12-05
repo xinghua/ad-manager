@@ -427,14 +427,17 @@ def log_format(arg):
     return output.strip().replace("\n", "")
 
 
-def log_record(logger, project_id, unique_user_id, client_ip, user_agent, request_args):
+def log_record(logger, project_id, unique_user_id, client_ip, idfa, user_agent, request_args):
     field_list = []
     field_list.append("project_id=%s" % log_format(project_id))
     field_list.append("user_cookie=%s" % log_format(unique_user_id))
     field_list.append("client_ip=%s" % log_format(client_ip))
+    field_list.append("idfa=%s" % log_format(idfa))
     field_list.append("user_agent=%s" % log_format(user_agent))
     field_list.append("datetime=%s" % log_format(datetime.now()))
+    field_str = "\t".join(field_list)
 
+    arg_list = []
     for k, v in request_args.items():
         if k == "project_id" or k == "code_type" or k == "s":
             continue
@@ -442,9 +445,14 @@ def log_record(logger, project_id, unique_user_id, client_ip, user_agent, reques
         if len(v) == 0:
             continue
 
-        field_list.append("%s=%s" % (k, log_format(v[0])))
+        arg_list.append("%s=%s" % (k, log_format(v[0])))
 
-    logger.info("\t".join(field_list))
+    if len(arg_list):
+        log_str = field_str + "\t" + ";;".join(arg_list)
+    else:
+        log_str = field_str
+
+    logger.info(log_str)
 
 
 def get_daily_logger(parent_path):

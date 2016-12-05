@@ -54,14 +54,15 @@ def mark_unique_user_id(response):
 @form_check({
     "project_id": F_int(u"project id") & "required" & "strict",
     "code_type": F_int(u"code type") & "required" & "strict",
+    "idfa": F_str(u"idfa") & "optional" & "strict",
     "s": F_str(u"sign") & "required" & "strict",
 }, error_handler=\
     functools.partial(Response404))
 def click(safe_vars):
     db = db_reader
 
-    #if not util.check_sign(safe_vars["s"], safe_vars["project_id"], safe_vars["code_type"]):
-    #    abort(404)
+    if not util.check_sign(safe_vars["s"], safe_vars["project_id"], safe_vars["code_type"]):
+        abort(404)
 
     project_info = QS(db).table(T.project).where(F.id == safe_vars["project_id"]).select_one()
     if project_info is None:
@@ -74,6 +75,7 @@ def click(safe_vars):
         safe_vars["project_id"],
         unique_user_id,
         client_ip(),
+        safe_vars["idfa"],
         request.user_agent.string,
         request.args
     )
