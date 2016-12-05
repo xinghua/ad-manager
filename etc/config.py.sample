@@ -8,9 +8,6 @@ app_path = "/app"
 flask_config = {
     "SESSION_COOKIE_HTTPONLY": True,
     "SESSION_COOKIE_NAME": "sid",
-
-    "JINJA_CACHE_SIZE": 300,
-    "JINJA_REDIS_CACHE": False,
 }
 
 redis_max_connections = 10
